@@ -19,6 +19,7 @@
         "symfony/yaml": "6.4.*"
     },
     "require-dev": {
+        "doctrine/doctrine-fixtures-bundle": "^3.6",
         "fakerphp/faker": "^1.23",
         "friendsofphp/php-cs-fixer": "^3.62",
         "phpstan/phpstan-symfony": "^1.4",
