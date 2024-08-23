@@ -14,26 +14,24 @@ use Symfony\Component\Serializer\SerializerInterface;
 
 class UserController extends AbstractController
 {
-    #[Route('api/user', name: 'app_user_create',methods: ['POST'])]
+    #[Route('api/user', name: 'app_user_create', methods: ['POST'])]
     public function createUser(
         Request $request,
         SerializerInterface $serializer,
         EntityManagerInterface $em,
         UserPasswordHasherInterface $passwordHasher
-    ): JsonResponse
-    {
-       $user = $serializer->deserialize($request->getContent(), User::class, 'json' );
+    ): JsonResponse {
+        $user = $serializer->deserialize($request->getContent(), User::class, 'json');
 
-       // get user password & hash them before user creation
+        // get user password & hash them before user creation
         $hashedPassword = $passwordHasher->hashPassword($user, $user->getPassword());
         $user->setPassword($hashedPassword);
 
         $user->setRoles(['ROLE_USER']);
 
-       $em->persist($user);
-       $em->flush();
+        $em->persist($user);
+        $em->flush();
 
-        return $this->json($user, Response::HTTP_OK, [], (array)'serializer');
-
+        return $this->json($user, Response::HTTP_OK, [], (array) 'serializer');
     }
 }
