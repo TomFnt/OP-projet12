@@ -14,7 +14,7 @@ class AppFixtures extends Fixture
     {
         $faker = Factory::create();
 
-        // Create 9 random Employees
+        // Create 9 random Users
         for ($i = 0; $i < 9; ++$i) {
             $firstName = $faker->firstName();
             $surName = $faker->lastName();
@@ -29,6 +29,7 @@ class AppFixtures extends Fixture
             $user->setPassword($faker->password());
             $user->setCity($city_list[$i]);
             $user->setCountry($country_list[$i]);
+            $user->setRoles(['ROLE_USER']);
 
             $manager->persist($user);
         }

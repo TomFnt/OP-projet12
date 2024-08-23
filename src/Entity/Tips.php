@@ -3,7 +3,6 @@
 namespace App\Entity;
 
 use App\Repository\TipsRepository;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: TipsRepository::class)]
@@ -14,10 +13,10 @@ class Tips
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(type: 'string', length: 255)]
     private ?string $description = null;
 
-    #[ORM\Column(type: Types::ARRAY, nullable: true)]
+    #[ORM\Column(type: 'json', nullable: true)]
     private ?array $month_list = null;
 
     public function getId(): ?int
