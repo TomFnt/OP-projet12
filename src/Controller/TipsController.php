@@ -14,14 +14,6 @@ class TipsController extends AbstractController
     #[Route('/api/tips', name: 'app_tips', methods: ['GET'])]
     public function getTips(TipsRepository $tipsRepository, SerializerInterface $serializer): JsonResponse
     {
-        $tips_list = $tipsRepository->findAll();
-
-        if ($tips_list) {
-            $json_response = $serializer->serialize($tips_list, 'json');
-
-            return new JsonResponse($json_response, Response::HTTP_OK, [], true);
-        }
-
-        return new JsonResponse(null, Response::HTTP_NOT_FOUND);
+        return $this->json($tipsRepository->findAll(), Response::HTTP_OK, [], (array)'serializer');
     }
 }
