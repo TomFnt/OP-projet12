@@ -7,9 +7,10 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-#[UniqueEntity('email')]
+#[UniqueEntity('login',"Ce nom d'utilisateur est déjà utilisé")]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -18,18 +19,26 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?int $id = null;
 
     #[ORM\Column(type: 'string', length: 255)]
+    #[Assert\NotBlank(message: "Il est obligatoire d'indiquer un login pour créer un compte utilisateur")]
     private ?string $login = null;
 
     #[ORM\Column(type: 'string', length: 255)]
+    #[Assert\NotBlank(message: "Il est obligatoire d'indiquer un mot de passe pour créer un compte utilisateur")]
+    #[Assert\Length(
+        min: 8,
+        minMessage: 'Le mot de passe doit comporter au moins {{ limit }} caractères.',
+    )]
     private ?string $password = null;
 
     #[ORM\Column(type: 'json')]
     private array $roles = [];
 
     #[ORM\Column(type: 'string', length: 255)]
+    #[Assert\NotBlank(message: "Il est obligatoire d'indiquer un pays pour créer un compte utilisateur")]
     private ?string $country = null;
 
     #[ORM\Column(type: 'string', length: 255)]
+    #[Assert\NotBlank(message: "Il est obligatoire d'indiquer une ville pour créer un compte utilisateur")]
     private ?string $city = null;
 
     public function getId(): ?int

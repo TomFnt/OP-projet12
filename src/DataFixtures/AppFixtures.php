@@ -16,16 +16,14 @@ class AppFixtures extends Fixture
 
         // Create 9 random Users
         for ($i = 0; $i < 9; ++$i) {
-            $firstName = $faker->firstName();
-            $surName = $faker->lastName();
-            $email = $firstName.'.'.$surName.'@'.$faker->freeEmailDomain();
+            $login = $faker->userName();
 
             // custom random list of city and associated country, in order to test different weather units
             $city_list = ['Paris', 'Tokyo', 'Sydney', 'CapeTown', 'Helsinki', 'Toronto', 'Mumbai', 'Lima', 'Reykjavik'];
             $country_list = ['France', 'Japon', 'Australie', 'Afrique du sud', 'Finlande', 'Canada', 'Inde', 'Pérou', 'Islande'];
 
             $user = new User();
-            $user->setLogin($email);
+            $user->setLogin($login);
             $user->setPassword($faker->password());
             $user->setCity($city_list[$i]);
             $user->setCountry($country_list[$i]);
