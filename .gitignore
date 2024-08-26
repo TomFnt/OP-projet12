@@ -44,3 +44,7 @@ phpstan.neon
 /tests/bootstrap.php
 /bin/phpunit
 /migrations/Version20240821134123.php
+
+###> lexik/jwt-authentication-bundle ###
+/config/jwt/*.pem
+###< lexik/jwt-authentication-bundle ###
