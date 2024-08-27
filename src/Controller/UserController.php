@@ -78,4 +78,14 @@ class UserController extends AbstractController
 
         return new JsonResponse(null, Response::HTTP_NO_CONTENT);
     }
+
+    #[Route('/api/user/{id}', name: 'app_user_delete', methods: ['DELETE'])]
+    #[IsGranted('ROLE_ADMIN', message: 'Vous n\'êtes pas autorisé à éditer un utilisateur')]
+    public function deleteUser(User $user, EntityManagerInterface $em): JsonResponse
+    {
+        $em->remove($user);
+        $em->flush();
+
+        return new JsonResponse(null, Response::HTTP_NO_CONTENT);
+    }
 }
