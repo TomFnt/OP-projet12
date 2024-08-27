@@ -10,6 +10,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
@@ -41,5 +43,39 @@ class UserController extends AbstractController
         $em->flush();
 
         return $this->json($user, Response::HTTP_OK, ['serializer']);
+    }
+
+    #[Route('api/user/{id}', name: 'app_user_edit', methods: ['PUT'])]
+    #[IsGranted('ROLE_ADMIN', message: 'Vous n\'êtes pas autorisé à éditer un utilisateur')]
+    public function editUser(
+        Request $request,
+        SerializerInterface $serializer,
+        EntityManagerInterface $em,
+        User $currentUser,
+        UserPasswordHasherInterface $passwordHasher,
+        ValidatorInterface $validator
+    ): JsonResponse {
+        $updatedUser = $serializer->deserialize(
+            $request->getContent(),
+            User::class,
+            'json',
+            [AbstractNormalizer::OBJECT_TO_POPULATE => $currentUser]);
+
+        $errors = $validator->validate($updatedUser);
+        if (count($errors) > 0) {
+            return $this->json($errors, Response::HTTP_BAD_REQUEST, ['serializer']);
+        }
+
+        // check if password are updated & hash them before user edition.
+        $updatedPassword = $updatedUser->getPassword();
+        if (!str_starts_with($updatedPassword, '$2y$')) {
+            $hashedPassword = $passwordHasher->hashPassword($currentUser, $updatedPassword);
+            $updatedUser->setPassword($hashedPassword);
+        }
+
+        $em->persist($updatedUser);
+        $em->flush();
+
+        return new JsonResponse(null, Response::HTTP_NO_CONTENT);
     }
 }
