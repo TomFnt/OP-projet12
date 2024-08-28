@@ -24,6 +24,19 @@ class TipsController extends AbstractController
         return $this->json($tipsRepository->findAll(), Response::HTTP_OK, [], (array) 'serializer');
     }
 
+    #[IsGranted('ROLE_USER', message: 'Vous devez vous connecter pour accèder à cette route')]
+    #[Route('/api/tips/{month}', name: 'app_tips_by_month', methods: ['GET'])]
+    public function getTipsByMonth(
+        TipsRepository $tipsRepository,
+        int $month): JsonResponse
+    {
+        if ($month < 1 || $month > 12) {
+            return $this->json(['error' => 'Invalid month'], Response::HTTP_BAD_REQUEST);
+        }
+
+        return $this->json($tipsRepository->findByMonth($month), Response::HTTP_OK, [], (array) 'serializer');
+    }
+
     #[IsGranted('ROLE_ADMIN', message: 'Vous n\'êtes pas autorisé à créer un nouveau conseil')]
     #[Route('/api/tip', name: 'app_tip_create', methods: ['POST'])]
     public function createTip(
