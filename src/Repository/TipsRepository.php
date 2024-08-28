@@ -4,7 +4,6 @@ namespace App\Repository;
 
 use App\Entity\Tips;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -17,20 +16,18 @@ class TipsRepository extends ServiceEntityRepository
         parent::__construct($registry, Tips::class);
     }
 
-
     /**
      * Get all tips by specific month.
      *
-     * @param int $month
      * @return Tips[]
      */
-    public function findByMonth(int $month) : array
+    public function findByMonth(int $month): array
     {
-       return $this->createQueryBuilder('t')
-            ->where('JSON_CONTAINS(t.month_list, :month, \'$\') = 1')
-            ->setParameter('month',json_encode($month))
-            ->getQuery()
-            ->getResult();
+        return $this->createQueryBuilder('t')
+             ->where('JSON_CONTAINS(t.month_list, :month, \'$\') = 1')
+             ->setParameter('month', json_encode($month))
+             ->getQuery()
+             ->getResult();
     }
 
     //    /**

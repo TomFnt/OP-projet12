@@ -87,7 +87,6 @@ class TipsController extends AbstractController
     #[Route('/api/tip/{id}', name: 'app_tip_delete', methods: ['DELETE'])]
     public function deleteTip(Tips $tip, EntityManagerInterface $em): JsonResponse
     {
-
         $em->remove($tip);
         $em->flush();
 
