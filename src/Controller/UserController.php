@@ -76,7 +76,7 @@ class UserController extends AbstractController
         $em->persist($updatedUser);
         $em->flush();
 
-        return new JsonResponse(null, Response::HTTP_NO_CONTENT);
+        return $this->json(null, Response::HTTP_NO_CONTENT);
     }
 
     #[Route('/api/user/{id}', name: 'app_user_delete', methods: ['DELETE'])]
@@ -86,6 +86,6 @@ class UserController extends AbstractController
         $em->remove($user);
         $em->flush();
 
-        return new JsonResponse(null, Response::HTTP_NO_CONTENT);
+        return $this->json(null, Response::HTTP_NO_CONTENT);
     }
 }
