@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
@@ -34,7 +35,6 @@ class TipsController extends AbstractController
         $tip = $serializer->deserialize($request->getContent(), Tips::class, 'json');
 
         $errors = $validator->validate($tip);
-
         if (count($errors) > 0) {
             return $this->json($errors, Response::HTTP_BAD_REQUEST, ['serializer']);
         }
@@ -43,5 +43,41 @@ class TipsController extends AbstractController
         $em->flush();
 
         return $this->json($tip, Response::HTTP_OK, ['serializer']);
+    }
+
+    #[IsGranted('ROLE_ADMIN', message: 'Vous n\'êtes pas autorisé à modifier un conseil')]
+    #[Route('/api/tip/{id}', name: 'app_tip_edit', methods: ['PUT'])]
+    public function editTip(
+        Request $request,
+        Tips $currentTip,
+        SerializerInterface $serializer,
+        EntityManagerInterface $em,
+        ValidatorInterface $validator
+    ): JsonResponse {
+        $updatedTip = $serializer->deserialize(
+            $request->getContent(),
+            Tips::class,
+            'json', [AbstractNormalizer::OBJECT_TO_POPULATE => $currentTip]);
+
+        $errors = $validator->validate($updatedTip);
+        if (count($errors) > 0) {
+            return $this->json($errors, Response::HTTP_BAD_REQUEST, ['serializer']);
+        }
+
+        $em->persist($updatedTip);
+        $em->flush();
+
+        return $this->json(null, Response::HTTP_NO_CONTENT);
+    }
+
+    #[IsGranted('ROLE_ADMIN', message: 'Vous n\'êtes pas autorisé à supprimer un conseil')]
+    #[Route('/api/tip/{id}', name: 'app_tip_delete', methods: ['DELETE'])]
+    public function deleteTip(Tips $tip, EntityManagerInterface $em): JsonResponse
+    {
+
+        $em->remove($tip);
+        $em->flush();
+
+        return $this->json(null, Response::HTTP_NO_CONTENT);
     }
 }
