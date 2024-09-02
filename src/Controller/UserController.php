@@ -66,10 +66,11 @@ class UserController extends AbstractController
             return $this->json($errors, Response::HTTP_BAD_REQUEST, ['serializer']);
         }
 
-        // check if password are updated & hash them before user edition.
-        $updatedPassword = $updatedUser->getPassword();
-        if (!str_starts_with($updatedPassword, '$2y$')) {
-            $hashedPassword = $passwordHasher->hashPassword($currentUser, $updatedPassword);
+        // check if password are send in request & hash them before user edition.
+        $requestData = json_decode($request->getContent(), true);
+
+        if (array_key_exists('password', $requestData)) {
+            $hashedPassword = $passwordHasher->hashPassword($currentUser, $updatedUser->getPassword());
             $updatedUser->setPassword($hashedPassword);
         }
 
