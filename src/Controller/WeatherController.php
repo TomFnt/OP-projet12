@@ -15,11 +15,15 @@ class WeatherController extends AbstractController
 {
     #[IsGranted('ROLE_USER', message: 'Vous devez vous connecter pour accèder à cette route')]
     #[Route('api/weather/{town}', name: 'app_weather_by_town', methods: ['GET'])]
-    public function getWeatherByTown(
+    #[Route('api/weather', name: 'app_weather_nullable', methods: ['GET'])]
+    public function getWeatherForecast(
         WeatherForecast $weatherForecast,
-        string $town
-    ): JsonResponse
-    {
-        return $this->json($weatherForecast->getWeatherForecastByTown($town), Response::HTTP_OK, [], (array) 'serializer');
+        string $town = ''
+    ): JsonResponse {
+        if ('' == $town) {
+            $town = $this->getUser()->getCity();
+        }
+
+        return $this->json($weatherForecast->getWeatherForecast($town), Response::HTTP_OK, [], (array) 'serializer');
     }
 }
