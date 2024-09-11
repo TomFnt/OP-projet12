@@ -18,27 +18,27 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 class TipsController extends AbstractController
 {
     #[IsGranted('ROLE_USER', message: 'Vous devez vous connecter pour accèder à cette route')]
-    #[Route('/api/tips', name: 'app_tips', methods: ['GET'])]
+    #[Route('/api/conseils', name: 'app_tips', methods: ['GET'])]
     public function getTips(TipsRepository $tipsRepository, SerializerInterface $serializer): JsonResponse
     {
         return $this->json($tipsRepository->findAll(), Response::HTTP_OK, [], (array) 'serializer');
     }
 
     #[IsGranted('ROLE_USER', message: 'Vous devez vous connecter pour accèder à cette route')]
-    #[Route('/api/tips/{month}', name: 'app_tips_by_month', methods: ['GET'])]
+    #[Route('/api/conseils/{month}', name: 'app_tips_by_month', methods: ['GET'])]
     public function getTipsByMonth(
         TipsRepository $tipsRepository,
         int $month): JsonResponse
     {
         if ($month < 1 || $month > 12) {
-            return $this->json(['error' => 'Invalid month'], Response::HTTP_BAD_REQUEST);
+            return $this->json(['error' => 'Le mois que vous avez saisi est invalide. Cela doit être un nombre entier compris entre 1 et 12.'], Response::HTTP_BAD_REQUEST);
         }
 
         return $this->json($tipsRepository->findByMonth($month), Response::HTTP_OK, [], (array) 'serializer');
     }
 
     #[IsGranted('ROLE_ADMIN', message: 'Vous n\'êtes pas autorisé à créer un nouveau conseil')]
-    #[Route('/api/tip', name: 'app_tip_create', methods: ['POST'])]
+    #[Route('/api/conseil', name: 'app_tip_create', methods: ['POST'])]
     public function createTip(
         Request $request,
         SerializerInterface $serializer,
@@ -59,7 +59,7 @@ class TipsController extends AbstractController
     }
 
     #[IsGranted('ROLE_ADMIN', message: 'Vous n\'êtes pas autorisé à modifier un conseil')]
-    #[Route('/api/tip/{id}', name: 'app_tip_edit', methods: ['PUT'])]
+    #[Route('/api/conseil/{id}', name: 'app_tip_edit', methods: ['PUT'])]
     public function editTip(
         Request $request,
         Tips $currentTip,
@@ -84,7 +84,7 @@ class TipsController extends AbstractController
     }
 
     #[IsGranted('ROLE_ADMIN', message: 'Vous n\'êtes pas autorisé à supprimer un conseil')]
-    #[Route('/api/tip/{id}', name: 'app_tip_delete', methods: ['DELETE'])]
+    #[Route('/api/conseil/{id}', name: 'app_tip_delete', methods: ['DELETE'])]
     public function deleteTip(Tips $tip, EntityManagerInterface $em): JsonResponse
     {
         $em->remove($tip);
