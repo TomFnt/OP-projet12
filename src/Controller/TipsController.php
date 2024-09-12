@@ -59,7 +59,7 @@ class TipsController extends AbstractController
     }
 
     #[IsGranted('ROLE_ADMIN', message: 'Vous n\'êtes pas autorisé à modifier un conseil')]
-    #[Route('/api/conseil/{id}', name: 'app_tip_edit', methods: ['PUT'])]
+    #[Route('/api/conseil/{id}', name: 'app_tip_edit', requirements: ['id' => '\d+'], methods: ['PUT'])]
     public function editTip(
         Request $request,
         Tips $currentTip,
@@ -84,7 +84,7 @@ class TipsController extends AbstractController
     }
 
     #[IsGranted('ROLE_ADMIN', message: 'Vous n\'êtes pas autorisé à supprimer un conseil')]
-    #[Route('/api/conseil/{id}', name: 'app_tip_delete', methods: ['DELETE'])]
+    #[Route('/api/conseil/{id}', name: 'app_tip_delete', requirements: ['id' => '\d+'], methods: ['DELETE'])]
     public function deleteTip(Tips $tip, EntityManagerInterface $em): JsonResponse
     {
         $em->remove($tip);

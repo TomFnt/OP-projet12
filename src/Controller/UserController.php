@@ -45,7 +45,7 @@ class UserController extends AbstractController
         return $this->json($user, Response::HTTP_OK, ['serializer']);
     }
 
-    #[Route('api/user/{id}', name: 'app_user_edit', methods: ['PUT'])]
+    #[Route('api/user/{id}', name: 'app_user_edit',requirements: ['id' => '\d+'], methods: ['PUT'])]
     #[IsGranted('ROLE_ADMIN', message: 'Vous n\'êtes pas autorisé à éditer un utilisateur')]
     public function editUser(
         Request $request,
@@ -80,7 +80,7 @@ class UserController extends AbstractController
         return $this->json(null, Response::HTTP_NO_CONTENT);
     }
 
-    #[Route('/api/user/{id}', name: 'app_user_delete', methods: ['DELETE'])]
+    #[Route('/api/user/{id}', name: 'app_user_delete', requirements: ['id' => '\d+'], methods: ['DELETE'])]
     #[IsGranted('ROLE_ADMIN', message: 'Vous n\'êtes pas autorisé à éditer un utilisateur')]
     public function deleteUser(User $user, EntityManagerInterface $em): JsonResponse
     {
