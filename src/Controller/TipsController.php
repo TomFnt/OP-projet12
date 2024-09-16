@@ -371,7 +371,7 @@ class TipsController extends AbstractController
     #[OA\Response(
         response: 200,
         description: "Confirme la suppression du conseil.",
-        content: new OA\JsonContent(ref: new Model(type: Tips::class))
+        content: null
     )]
     #[OA\Response(
         response: 401,
