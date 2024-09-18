@@ -21,9 +21,6 @@ class TipsController extends AbstractController
 {
     /**
      * Permet d'obtenir l'ensemble des conseils.
-     *
-     * @param TipsRepository $tipsRepository
-     * @return JsonResponse
      */
     #[IsGranted('ROLE_USER', message: 'Vous devez vous connecter pour accèder à cette route')]
     #[Route('/api/conseils', name: 'app_tips', methods: ['GET'])]
@@ -46,7 +43,7 @@ class TipsController extends AbstractController
                     property: 'message',
                     type: 'string',
                     example: 'Invalid JWT Token'
-                )
+                ),
             ]
         )
     )]
@@ -57,10 +54,7 @@ class TipsController extends AbstractController
     }
 
     /**
-     * Permet d'obtenir les conseils qui sont destinés à un mois spécifique
-     * @param TipsRepository $tipsRepository
-     * @param int $month
-     * @return JsonResponse
+     * Permet d'obtenir les conseils qui sont destinés à un mois spécifique.
      */
     #[IsGranted('ROLE_USER', message: 'Vous devez vous connecter pour accèder à cette route')]
     #[Route('/api/conseils/{month}', name: 'app_tips_by_month', methods: ['GET'])]
@@ -89,7 +83,7 @@ class TipsController extends AbstractController
                     property: 'message',
                     type: 'string',
                     example: 'Invalid JWT Token'
-                )
+                ),
             ]
         )
     )]
@@ -107,17 +101,11 @@ class TipsController extends AbstractController
 
     /**
      * Permet de créer un nouveau conseil.
-     *
-     * @param Request $request
-     * @param SerializerInterface $serializer
-     * @param EntityManagerInterface $em
-     * @param ValidatorInterface $validator
-     * @return JsonResponse
      */
     #[IsGranted('ROLE_ADMIN', message: 'Vous n\'êtes pas autorisé à créer un nouveau conseil')]
     #[Route('/api/conseil', name: 'app_tip_create', methods: ['POST'])]
     #[OA\RequestBody(
-        description: "Les informations nécessaires pour créer un conseil :",
+        description: 'Les informations nécessaires pour créer un conseil :',
         content: new OA\JsonContent(
             properties: [
                 new OA\Property(
@@ -132,13 +120,13 @@ class TipsController extends AbstractController
                     description: "Correspond à l'ensemble des mois associés à ce conseil, sous la forme d'une liste de nombres entre 1 et 12.",
                     items: new OA\Items(type: 'integer'),
                     example: [12, 1, 2]
-                )
+                ),
             ]
         )
     )]
     #[OA\Response(
         response: 201,
-        description: "Confirme la création du nouveau conseil.",
+        description: 'Confirme la création du nouveau conseil.',
         content: new OA\JsonContent(ref: new Model(type: Tips::class))
     )]
     #[OA\Response(
@@ -154,8 +142,8 @@ class TipsController extends AbstractController
                 new OA\Property(
                     property: 'message',
                     type: 'string',
-                    example: "month_list: La valeur \"13\" dans la liste \"month_list\" doit-être un nombre entier entre 1 et 12.",
-                )
+                    example: 'month_list: La valeur "13" dans la liste "month_list" doit-être un nombre entier entre 1 et 12.',
+                ),
             ]
         )
     )]
@@ -173,7 +161,7 @@ class TipsController extends AbstractController
                     property: 'message',
                     type: 'string',
                     example: 'Invalid JWT Token'
-                )
+                ),
             ]
         )
     )]
@@ -191,7 +179,7 @@ class TipsController extends AbstractController
                     property: 'message',
                     type: 'string',
                     example: "Vous n'êtes pas autorisé à créer un nouveau conseil"
-                )
+                ),
             ]
         )
     )]
@@ -217,13 +205,6 @@ class TipsController extends AbstractController
 
     /**
      * Permet de modifier les informations d'un conseil.
-     *
-     * @param Request $request
-     * @param Tips $currentTip
-     * @param SerializerInterface $serializer
-     * @param EntityManagerInterface $em
-     * @param ValidatorInterface $validator
-     * @return JsonResponse
      */
     #[IsGranted('ROLE_ADMIN', message: 'Vous n\'êtes pas autorisé à modifier un conseil')]
     #[Route('/api/conseil/{id}', name: 'app_tip_edit', requirements: ['id' => '\d+'], methods: ['PUT'])]
@@ -234,7 +215,7 @@ class TipsController extends AbstractController
         schema: new OA\Schema(type: 'integer', example: 8)
     )]
     #[OA\RequestBody(
-        description: "Les informations nécessaires pour modifier un conseil :",
+        description: 'Les informations nécessaires pour modifier un conseil :',
         content: new OA\JsonContent(
             properties: [
                 new OA\Property(
@@ -249,13 +230,13 @@ class TipsController extends AbstractController
                     description: "Correspond à l'ensemble des mois associés à ce conseil, sous la forme d'une liste de nombres entre 1 et 12.",
                     items: new OA\Items(type: 'integer'),
                     example: [12, 1, 2]
-                )
+                ),
             ]
         )
     )]
     #[OA\Response(
         response: 200,
-        description: "Confirme la modification du conseil."
+        description: 'Confirme la modification du conseil.'
     )]
     #[OA\Response(
         response: 400,
@@ -270,8 +251,8 @@ class TipsController extends AbstractController
                 new OA\Property(
                     property: 'message',
                     type: 'string',
-                    example: "month_list: La valeur \"13\" dans la liste \"month_list\" doit-être un nombre entier entre 1 et 12.",
-                )
+                    example: 'month_list: La valeur "13" dans la liste "month_list" doit-être un nombre entier entre 1 et 12.',
+                ),
             ]
         )
     )]
@@ -289,7 +270,7 @@ class TipsController extends AbstractController
                     property: 'message',
                     type: 'string',
                     example: 'Invalid JWT Token'
-                )
+                ),
             ]
         )
     )]
@@ -307,7 +288,7 @@ class TipsController extends AbstractController
                     property: 'message',
                     type: 'string',
                     example: "Vous n'êtes pas autorisé à modifier un conseil"
-                )
+                ),
             ]
         )
     )]
@@ -324,8 +305,8 @@ class TipsController extends AbstractController
                 new OA\Property(
                     property: 'message',
                     type: 'string',
-                    example: "\"App\\Entity\\Tips\" object not found by \"Symfony\\Bridge\\Doctrine\\ArgumentResolver\\EntityValueResolver\"."
-                )
+                    example: '"App\\Entity\\Tips" object not found by "Symfony\\Bridge\\Doctrine\\ArgumentResolver\\EntityValueResolver".'
+                ),
             ]
         )
     )]
@@ -354,11 +335,7 @@ class TipsController extends AbstractController
     }
 
     /**
-     * Permet de supprimer un conseil
-     *
-     * @param Tips $tip
-     * @param EntityManagerInterface $em
-     * @return JsonResponse
+     * Permet de supprimer un conseil.
      */
     #[IsGranted('ROLE_ADMIN', message: 'Vous n\'êtes pas autorisé à supprimer un conseil')]
     #[Route('/api/conseil/{id}', name: 'app_tip_delete', requirements: ['id' => '\d+'], methods: ['DELETE'])]
@@ -370,7 +347,7 @@ class TipsController extends AbstractController
     )]
     #[OA\Response(
         response: 200,
-        description: "Confirme la suppression du conseil.",
+        description: 'Confirme la suppression du conseil.',
         content: null
     )]
     #[OA\Response(
@@ -387,7 +364,7 @@ class TipsController extends AbstractController
                     property: 'message',
                     type: 'string',
                     example: 'Invalid JWT Token'
-                )
+                ),
             ]
         )
     )]
@@ -405,7 +382,7 @@ class TipsController extends AbstractController
                     property: 'message',
                     type: 'string',
                     example: "Vous n'êtes pas autorisé à supprimer un conseil"
-                )
+                ),
             ]
         )
     )]
@@ -422,8 +399,8 @@ class TipsController extends AbstractController
                 new OA\Property(
                     property: 'message',
                     type: 'string',
-                    example: "\"App\\Entity\\Tips\" object not found by \"Symfony\\Bridge\\Doctrine\\ArgumentResolver\\EntityValueResolver\"."
-                )
+                    example: '"App\\Entity\\Tips" object not found by "Symfony\\Bridge\\Doctrine\\ArgumentResolver\\EntityValueResolver".'
+                ),
             ]
         )
     )]

@@ -4,6 +4,8 @@ namespace App\Controller;
 
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
+use Nelmio\ApiDocBundle\Annotation\Model;
+use OpenApi\Attributes as OA;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,23 +16,15 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
-use Nelmio\ApiDocBundle\Annotation\Model;
-use OpenApi\Attributes as OA;
 
 class UserController extends AbstractController
 {
     /**
-     * Permet de créer un nouveau compte utilisateur
-     * @param Request $request
-     * @param SerializerInterface $serializer
-     * @param EntityManagerInterface $em
-     * @param UserPasswordHasherInterface $passwordHasher
-     * @param ValidatorInterface $validator
-     * @return JsonResponse
+     * Permet de créer un nouveau compte utilisateur.
      */
     #[Route('api/user', name: 'app_user_create', methods: ['POST'])]
     #[OA\RequestBody(
-        description: "Les informations nécessaires pour créer un conseil :",
+        description: 'Les informations nécessaires pour créer un conseil :',
         content: new OA\JsonContent(
             properties: [
                 new OA\Property(
@@ -43,20 +37,20 @@ class UserController extends AbstractController
                     property: 'password',
                     type: 'string',
                     description: "Correspond au mot de passe du compte de l'utilisateur",
-                    example: "1Mot2passe"
+                    example: '1Mot2passe'
                 ),
                 new OA\Property(
                     property: 'city',
                     type: 'string',
-                    description:"Correspond à la ville de résidence de l'utilisateur",
-                    example: "Paris"
+                    description: "Correspond à la ville de résidence de l'utilisateur",
+                    example: 'Paris'
                 ),
                 new OA\Property(
                     property: 'country',
                     type: 'string',
-                    description:"Correspond au pays de résidence de l'utilisateur",
-                    example: "France"
-                )
+                    description: "Correspond au pays de résidence de l'utilisateur",
+                    example: 'France'
+                ),
             ]
         )
     )]
@@ -79,7 +73,7 @@ class UserController extends AbstractController
                     property: 'message',
                     type: 'string',
                     example: "login: Ce nom d'utilisateur est déjà utilisé",
-                )
+                ),
             ]
         )
     )]
@@ -112,17 +106,9 @@ class UserController extends AbstractController
     }
 
     /**
-     * Permet de modifier les informations d'un compte utilisateur
-     *
-     * @param Request $request
-     * @param SerializerInterface $serializer
-     * @param EntityManagerInterface $em
-     * @param User $currentUser
-     * @param UserPasswordHasherInterface $passwordHasher
-     * @param ValidatorInterface $validator
-     * @return JsonResponse
+     * Permet de modifier les informations d'un compte utilisateur.
      */
-    #[Route('api/user/{id}', name: 'app_user_edit',requirements: ['id' => '\d+'], methods: ['PUT'])]
+    #[Route('api/user/{id}', name: 'app_user_edit', requirements: ['id' => '\d+'], methods: ['PUT'])]
     #[IsGranted('ROLE_ADMIN', message: 'Vous n\'êtes pas autorisé à éditer un compte utilisateur')]
     #[OA\Parameter(
         name: 'id',
@@ -131,7 +117,7 @@ class UserController extends AbstractController
         schema: new OA\Schema(type: 'integer', example: 8)
     )]
     #[OA\RequestBody(
-        description: "Les informations nécessaires pour créer un conseil :",
+        description: 'Les informations nécessaires pour créer un conseil :',
         content: new OA\JsonContent(
             properties: [
                 new OA\Property(
@@ -144,20 +130,20 @@ class UserController extends AbstractController
                     property: 'password',
                     type: 'string',
                     description: "Correspond au mot de passe du compte de l'utilisateur",
-                    example: "1Mot2passe"
+                    example: '1Mot2passe'
                 ),
                 new OA\Property(
                     property: 'city',
                     type: 'string',
-                    description:"Correspond à la ville de résidence de l'utilisateur",
-                    example: "Paris"
+                    description: "Correspond à la ville de résidence de l'utilisateur",
+                    example: 'Paris'
                 ),
                 new OA\Property(
                     property: 'country',
                     type: 'string',
-                    description:"Correspond au pays de résidence de l'utilisateur",
-                    example: "France"
-                )
+                    description: "Correspond au pays de résidence de l'utilisateur",
+                    example: 'France'
+                ),
             ]
         )
     )]
@@ -179,8 +165,8 @@ class UserController extends AbstractController
                 new OA\Property(
                     property: 'message',
                     type: 'string',
-                    example: "password: Le mot de passe doit comporter au moins 8 caractères.",
-                )
+                    example: 'password: Le mot de passe doit comporter au moins 8 caractères.',
+                ),
             ]
         )
     )]
@@ -198,7 +184,7 @@ class UserController extends AbstractController
                     property: 'message',
                     type: 'string',
                     example: 'Invalid JWT Token'
-                )
+                ),
             ]
         )
     )]
@@ -216,7 +202,7 @@ class UserController extends AbstractController
                     property: 'message',
                     type: 'string',
                     example: "Vous n'êtes pas autorisé à éditer un compte utilisateur"
-                )
+                ),
             ]
         )
     )]
@@ -233,8 +219,8 @@ class UserController extends AbstractController
                 new OA\Property(
                     property: 'message',
                     type: 'string',
-                    example: "\"App\\Entity\\User\" object not found by \"Symfony\\Bridge\\Doctrine\\ArgumentResolver\\EntityValueResolver\"."
-                )
+                    example: '"App\\Entity\\User" object not found by "Symfony\\Bridge\\Doctrine\\ArgumentResolver\\EntityValueResolver".'
+                ),
             ]
         )
     )]
@@ -273,11 +259,7 @@ class UserController extends AbstractController
     }
 
     /**
-     * Permet de supprimer le compte d'un utilisateur
-     *
-     * @param User $user
-     * @param EntityManagerInterface $em
-     * @return JsonResponse
+     * Permet de supprimer le compte d'un utilisateur.
      */
     #[Route('/api/user/{id}', name: 'app_user_delete', requirements: ['id' => '\d+'], methods: ['DELETE'])]
     #[IsGranted('ROLE_ADMIN', message: 'Vous n\'êtes pas autorisé à supprimer un utilisateur')]
@@ -306,7 +288,7 @@ class UserController extends AbstractController
                     property: 'message',
                     type: 'string',
                     example: 'Invalid JWT Token'
-                )
+                ),
             ]
         )
     )]
@@ -324,7 +306,7 @@ class UserController extends AbstractController
                     property: 'message',
                     type: 'string',
                     example: "Vous n'êtes pas autorisé à supprimer un utilisateur"
-                )
+                ),
             ]
         )
     )]
@@ -341,8 +323,8 @@ class UserController extends AbstractController
                 new OA\Property(
                     property: 'message',
                     type: 'string',
-                    example: "\"App\\Entity\\User\" object not found by \"Symfony\\Bridge\\Doctrine\\ArgumentResolver\\EntityValueResolver\"."
-                )
+                    example: '"App\\Entity\\User" object not found by "Symfony\\Bridge\\Doctrine\\ArgumentResolver\\EntityValueResolver".'
+                ),
             ]
         )
     )]
