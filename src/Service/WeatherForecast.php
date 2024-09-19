@@ -3,6 +3,7 @@
 namespace App\Service;
 
 use Symfony\Component\Config\Definition\Exception\Exception;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\Cache\ItemInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
@@ -38,9 +39,10 @@ class WeatherForecast
 
             $response = $this->httpClient->request('GET', $url);
 
-            if (200 !== $response->getStatusCode()) {
-                throw new Exception($response->getContent(), $response->getStatusCode());
-            }
+            match ($response->getStatusCode() ){
+                404=> throw new HttpException($response->getStatusCode(), "La ville n'est pas valide ou reconnu (exemple : Londre au lieu de London) "),
+                401=> throw new HttpException()
+            };
 
             $responseData = $response->toArray();
 
