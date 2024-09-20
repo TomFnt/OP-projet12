@@ -39,3 +39,12 @@ phpstan.neon
 /.php-cs-fixer.php
 /.php-cs-fixer.cache
 ###< friendsofphp/php-cs-fixer ###
+/migrations/.gitignore
+/.env.test
+/tests/bootstrap.php
+/bin/phpunit
+/migrations/Version20240821134123.php
+
+###> lexik/jwt-authentication-bundle ###
+/config/jwt/*.pem
+###< lexik/jwt-authentication-bundle ###

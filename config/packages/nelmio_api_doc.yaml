@@ -1,0 +1,64 @@
+nelmio_api_doc:
+    documentation:
+        info:
+            title: API Ecogarden & Co
+            description: Une API proposant différents conseils de jardinage et permettant de récupérer les prévisions météo pour une ville spécifique.
+            version: 1.0.0
+        paths:
+            /api/auth:
+                post:
+                    operationId: postCredentialsItem
+                    tags:
+                        - Authentification
+                    summary: Permet d'obtenir le token JWT pour se connecter.
+                    requestBody:
+                        description: Crée un nouveau token JWT en fournissant les identifiants.
+                        content:
+                            application/json:
+                                schema:
+                                    $ref: '#/components/schemas/Credentials'
+                    responses:
+                        '200':
+                            description: Récupère le token JWT en cas de succès.
+                            content:
+                                application/json:
+                                    schema:
+                                        $ref: '#/components/schemas/Token'
+                        '401':
+                            description: Identifiants invalides.
+                            content:
+                                application/json:
+                                    schema:
+                                        type: object
+                                        properties:
+                                            message:
+                                                type: string
+                                                example: "Invalid credentials."
+        components:
+            schemas:
+                Token:
+                    type: object
+                    properties:
+                        token:
+                            type: string
+                            readOnly: true
+                            example: "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1..."
+                Credentials:
+                    type: object
+                    properties:
+                        login:
+                            type: string
+                            example: un.email@admin.com
+                        password:
+                            type: string
+                            example: password
+            securitySchemes:
+                bearerAuth:
+                    type: http
+                    scheme: bearer
+                    bearerFormat: JWT
+        security:
+            - bearerAuth: []
+    areas: # to filter documented areas
+        path_patterns:
+            - ^/api(?!/doc$) # Inclut les routes commençant par /api sauf /api/doc
